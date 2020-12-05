@@ -27,18 +27,19 @@ body {
 .buttons p:hover{
     background-color: rgb(190, 190, 255);
 }
+.buttons p:hover{
+    background-color: rgb(190, 190, 255);
+}
 
-.start{
+.hFirst{
     width: 150px;
 }
 
-.stop{
+.AIFirst{
     width: 150px;
 }
 
-.obstacle{
-    width: 150px;
-}
+
 
 .reset{
     width: 150px;
