@@ -45,6 +45,9 @@ function draw(){
         noLoop();
         console.log(w);
     }
+    if(currentPlayer == 0){
+        AITurn();
+    }
 }
 function move(i,j){
     if(currentPlayer == 0){
@@ -58,7 +61,7 @@ function move(i,j){
 }
 function across(a,b,c){
     if(a.tag==b.tag && b.tag==c.tag && a.tag !=0){
-        console.log("t");
+
         return true;
     }
     return false;
@@ -92,7 +95,7 @@ function check(){
     //check for tie
     var empty = 9;
     for(i = 0;i < 3; i++){
-        for(j = 0;j < 3; j++){
+        for(var j = 0;j < 3; j++){
             if(grid[i][j].tag != 0){
                 empty--;
             }
@@ -113,4 +116,66 @@ function mouseClicked(){
         }
         
     }
+}
+function AITurn(){
+    var bestMove = new Array(2);
+    var bestScore = -Infinity;
+    var score;
+    for(var i = 0; i <3; i++){
+        for(var j = 0; j <3; j++){
+            if(grid[i][j].tag == 0){
+                grid[i][j].tag= 1;
+                score = miniMax(grid, 0, false);
+                grid[i][j].tag= 0;
+                if(score > bestScore){
+                    bestScore = score;
+                    bestMove[0] = i;
+                    bestMove[1] = j;
+                }
+
+            }
+        }
+    }
+    move(bestMove[0],bestMove[1]);
+}
+function miniMax(board, depth, isMaxing){
+    var result = check();
+
+    if(result == 1){
+        return 10;
+    }
+    if(result == 2){
+        return -10;
+    }
+    if(result == 3){
+        return 0;
+    }
+    if(isMaxing){
+        var bestScore = -Infinity;
+        for(var i = 0; i <3; i++){
+            for(var j = 0; j <3; j++){
+                if(board[i][j].tag == 0){
+                    board[i][j].tag = 1;
+                    var score = miniMax(board,depth+1,false);
+                    board[i][j].tag = 0;
+                    bestScore = max(score,bestScore);
+                }
+            }
+        }
+        return bestScore;
+    }else{
+        bestScore = Infinity;
+        for( i = 0; i <3; i++){
+            for( j = 0; j <3; j++){
+                if(board[i][j].tag == 0){
+                    board[i][j].tag = 2;
+                    score = miniMax(board,depth+1,true);
+                    board[i][j].tag = 0;
+                    bestScore = min(score,bestScore);
+                }
+            }
+        }
+        return bestScore;
+    }
+
 }
